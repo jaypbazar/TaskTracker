@@ -1,5 +1,9 @@
 enum TaskPriority { 
-  low, 
-  medium, 
-  high 
+  low('low'), 
+  medium('medium'), 
+  high('high');
+
+  final String stringValue;
+
+  const TaskPriority(this.stringValue);
 }
