@@ -1,12 +1,11 @@
-enum TaskPriority { low, medium, high }
+import 'TaskPriority.dart';
 
 class Task {
   String title;
   String subject;
   TaskPriority priority;
-  String description;
+  String? description;
   bool isCompleted;
 
-  Task(this.title, this.subject, this.priority, this.description)
-      : isCompleted = false;
+  Task(this.title, this.subject, this.priority, [this.description]) : isCompleted = false;
 }
