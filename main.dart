@@ -32,7 +32,11 @@ main(){
       stdout.write("Enter task description(optional): ");
       String? description = stdin.readLineSync();
       
-      tasktracker.addTask(title: title, subject: subject, description: description);
+      if (tasktracker.addTask(title: title, subject: subject, description: description)) {
+        print("Task added successfully!");
+      } else {
+        print("Failed to add task.");
+      }
       break;
     case "2":
       // View Tasks
