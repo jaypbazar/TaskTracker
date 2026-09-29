@@ -2,8 +2,9 @@ import 'dart:io';
 
 import 'TaskTracker.dart';
 
-main(){
+main() {
   Tasktracker tasktracker = Tasktracker();
+  tasktracker.populateSampleTasks();
 
   print("=======================================================");
   print("\t\tWelcome to Task Tracker");
@@ -19,7 +20,7 @@ main(){
   stdout.write("Enter your choice: ");
   String? choice = stdin.readLineSync();
 
-  switch(choice){
+  switch (choice) {
     case "0":
       print("Exiting...");
       break;
@@ -31,8 +32,12 @@ main(){
       String subject = stdin.readLineSync() ?? '';
       stdout.write("Enter task description(optional): ");
       String? description = stdin.readLineSync();
-      
-      if (tasktracker.addTask(title: title, subject: subject, description: description)) {
+
+      if (tasktracker.addTask(
+        title: title,
+        subject: subject,
+        description: description,
+      )) {
         print("Task added successfully!");
       } else {
         print("Failed to add task.");
@@ -40,6 +45,7 @@ main(){
       break;
     case "2":
       // View Tasks
+      tasktracker.viewTasks();
       break;
     case "3":
       // Complete Task
