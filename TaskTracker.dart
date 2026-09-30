@@ -54,13 +54,13 @@ class Tasktracker {
     
     List<Task> inCompleteTasks = tasks.where((t) => t.isCompleted == false).toList();
     for (Task task in inCompleteTasks) {
-      print("[ ] ${count + 1}. ${task.title}\n   Subject: ${task.subject}\n   Task Priority: ${task.priority.stringValue}${task.description != null ? "\n   Description: ${task.description}" : ""}\n");
+      print("[ ] ${count + 1}. ${task.title}\n    Subject: ${task.subject}\n    Task Priority: ${task.priority.stringValue}${task.description != null ? "\n    Description: ${task.description}" : ""}\n");
       count++;
     }
 
     List<Task> completeTasks = tasks.where((t) => t.isCompleted == true).toList();
     for (Task task in completeTasks) {
-      print("[✓] ${count + 1}. ${task.title}\n   Subject: ${task.subject}\n   Task Priority: ${task.priority.stringValue}${task.description != null ? "\n   Description: ${task.description}" : ""}\n");
+      print("[✓] ${count + 1}. ${task.title}\n    Subject: ${task.subject}\n    Task Priority: ${task.priority.stringValue}${task.description != null ? "\n    Description: ${task.description}" : ""}\n");
       count++;
     }
   }
