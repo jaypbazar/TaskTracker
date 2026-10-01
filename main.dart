@@ -64,10 +64,36 @@ main() {
       case "2":
         // View Tasks
         print("\n==================== List of Tasks ====================\n");
-        tasktracker.viewTasks();
+        tasktracker.viewSortedTasks();
         break;
       case "3":
         // Complete Task
+        print("\n=================== Complete a Task ===================\n");
+        if (tasktracker.getIncompleteTaskCount() == 0) {
+          print("No tasks to complete.");
+          break;
+        }
+        tasktracker.viewTasks();
+
+        String? taskNumberInput = getUserInput(
+          prompt: "\nEnter the task number to mark as completed (0 to go back): ",
+          isValid: (input) {
+            if (input == '' || input == null) return false;
+            int? taskNumber = int.tryParse(input);
+            return taskNumber != null && taskNumber >= 0 && taskNumber <= tasktracker.tasks.length;
+          },
+          errorMessage: "Invalid input. Please try again."
+        );
+        if (taskNumberInput == '0') {
+          print("\nGoing back to the main menu.");
+          break;
+        }
+        int taskNumber = int.parse(taskNumberInput!);
+        if (tasktracker.markTaskAsCompleted(taskNumber)) {
+          print("\nTask marked as completed.");
+        } else {
+          print("\nTask is already completed.");
+        }
         break;
       case "4":
         // Search Tasks

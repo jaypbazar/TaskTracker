@@ -45,7 +45,20 @@ class Tasktracker {
 
   viewTasks() {
     if (tasks.isEmpty) {
-      print("No tasks available.");
+      print("\nNo tasks available.");
+      return;
+    }
+  
+    for (int i = 0; i < tasks.length; i++) {
+      Task task = tasks[i];
+      String status = task.isCompleted ? "[✓]" : "[ ]";
+      print("$status ${i + 1}. ${task.title}\n    Subject: ${task.subject}\n    Task Priority: ${task.priority.stringValue}${task.description != null ? "\n    Description: ${task.description}" : ""}\n");
+    }
+  }
+
+  viewSortedTasks() {
+    if (tasks.isEmpty) {
+      print("\nNo tasks available.");
       return;
     }
 
@@ -63,5 +76,15 @@ class Tasktracker {
       print("[✓] ${count + 1}. ${task.title}\n    Subject: ${task.subject}\n    Task Priority: ${task.priority.stringValue}${task.description != null ? "\n    Description: ${task.description}" : ""}\n");
       count++;
     }
+  }
+
+  bool markTaskAsCompleted(int taskNumber) {
+    if (tasks[taskNumber - 1].isCompleted) return false;
+    tasks[taskNumber - 1].isCompleted = true;
+    return true;
+  }
+
+  int getIncompleteTaskCount() {
+    return tasks.where((t) => t.isCompleted == false).length;
   }
 }
