@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'InputHandler.dart';
 import 'TaskTracker.dart';
 
 main() {
@@ -19,8 +20,11 @@ main() {
     print("5. Statistics");
     print("6. Watch Task Updates");
 
-    stdout.write("\nEnter your choice: ");
-    String? choice = stdin.readLineSync();
+    String? choice = getUserInput(
+      prompt: "\nEnter your choice: ",
+      isValid: (input) => input != null && ['0', '1', '2', '3', '4', '5', '6'].contains(input),
+      errorMessage: "Invalid choice. Please try again."
+    );
 
     switch (choice) {
       case "0":
@@ -29,12 +33,24 @@ main() {
       case "1":
         // Add Task
         print("\n==================== Add New Task ====================\n");
-        stdout.write("Enter task title: ");
-        String title = stdin.readLineSync() ?? '';
-        stdout.write("Enter task subject: ");
-        String subject = stdin.readLineSync() ?? '';
-        stdout.write("Enter task description(optional): ");
-        String? description = stdin.readLineSync();
+        
+        String title = getUserInput(
+          prompt: "",
+          isValid: (input) => input != null && input.isNotEmpty,
+          errorMessage: "Task title cannot be empty. Please try again."
+        ) ?? '';
+        
+        String subject = getUserInput(
+          prompt: "",
+          isValid: (input) => input != null && input.isNotEmpty,
+          errorMessage: "Task subject cannot be empty. Please try again."
+        ) ?? '';
+        
+        String? description = getUserInput(
+          prompt: "",
+          isValid: (input) => input != null,
+          errorMessage: "Invalid description. Please try again."
+        );
 
         if (tasktracker.addTask(
           title: title,
