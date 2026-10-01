@@ -35,21 +35,20 @@ main() {
         print("\n==================== Add New Task ====================\n");
         
         String title = getUserInput(
-          prompt: "",
-          isValid: (input) => input != null && input.isNotEmpty,
+          prompt: "Enter task title: ",
+          isValid: (input) => input != null,
           errorMessage: "Task title cannot be empty. Please try again."
         ) ?? '';
         
         String subject = getUserInput(
-          prompt: "",
-          isValid: (input) => input != null && input.isNotEmpty,
+          prompt: "Enter task subject: ",
+          isValid: (input) => input != null,
           errorMessage: "Task subject cannot be empty. Please try again."
         ) ?? '';
         
         String? description = getUserInput(
-          prompt: "",
-          isValid: (input) => input != null,
-          errorMessage: "Invalid description. Please try again."
+          prompt: "Enter task description (optional): ",
+          isValid: (input) => input == null || input.isNotEmpty
         );
 
         if (tasktracker.addTask(
