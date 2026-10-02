@@ -78,13 +78,28 @@ class Tasktracker {
     }
   }
 
-  bool markTaskAsCompleted(int taskNumber) {
-    if (tasks[taskNumber - 1].isCompleted) return false;
-    tasks[taskNumber - 1].isCompleted = true;
-    return true;
+  displayTask(int index) {
+    Task task = tasks[index-1];
+    print("\nTitle: ${task.title}");
+    print("Subject: ${task.subject}");
+    print("Priority: ${task.priority.stringValue}");
+    print("Description: ${task.description != null ? '${task.description}' : 'N/A'}");
+    print("isComplete: ${task.isCompleted ? 'Yes' : 'No'}");
   }
 
-  int getIncompleteTaskCount() {
-    return tasks.where((t) => t.isCompleted == false).length;
+  bool deleteTask(int index) {
+    try {
+      tasks.removeAt(index);
+      return true;
+    }
+    catch (e){
+      return false;
+    }
+  }
+
+  bool markTaskAsCompleted(int index) {
+    if (tasks[index].isCompleted) return false;
+    tasks[index].isCompleted = true;
+    return true;
   }
 }

@@ -15,15 +15,16 @@ main() {
     print("0. Exit");
     print("1. Add Task");
     print("2. View Tasks");
-    print("3. Complete Task");
+    print("3. Modify a Task");
     print("4. Search Tasks");
     print("5. Statistics");
     print("6. Watch Task Updates");
 
     String? choice = getUserInput(
       prompt: "\nEnter your choice: ",
-      isValid: (input) => input != null && ['0', '1', '2', '3', '4', '5', '6'].contains(input),
-      errorMessage: "Invalid choice. Please try again."
+      isValid: (input) =>
+          input != null && ['0', '1', '2', '3', '4', '5', '6'].contains(input),
+      errorMessage: "Invalid choice. Please try again.",
     );
 
     switch (choice) {
@@ -33,22 +34,26 @@ main() {
       case "1":
         // Add Task
         print("\n==================== Add New Task ====================\n");
-        
-        String title = getUserInput(
-          prompt: "Enter task title: ",
-          isValid: (input) => input != null,
-          errorMessage: "Task title cannot be empty. Please try again."
-        ) ?? '';
-        
-        String subject = getUserInput(
-          prompt: "Enter task subject: ",
-          isValid: (input) => input != null,
-          errorMessage: "Task subject cannot be empty. Please try again."
-        ) ?? '';
-        
+
+        String title =
+            getUserInput(
+              prompt: "Enter task title: ",
+              isValid: (input) => input != null,
+              errorMessage: "Task title cannot be empty. Please try again.",
+            ) ??
+            '';
+
+        String subject =
+            getUserInput(
+              prompt: "Enter task subject: ",
+              isValid: (input) => input != null,
+              errorMessage: "Task subject cannot be empty. Please try again.",
+            ) ??
+            '';
+
         String? description = getUserInput(
           prompt: "Enter task description (optional): ",
-          isValid: (input) => input == null || input.isNotEmpty
+          isValid: (input) => input == null || input.isNotEmpty,
         );
 
         if (tasktracker.addTask(
@@ -67,32 +72,62 @@ main() {
         tasktracker.viewSortedTasks();
         break;
       case "3":
-        // Complete Task
-        print("\n=================== Complete a Task ===================\n");
-        if (tasktracker.getIncompleteTaskCount() == 0) {
-          print("No tasks to complete.");
-          break;
-        }
+        // Modify a Task
+        print("\n=================== Modify a Task ===================\n");
         tasktracker.viewTasks();
 
-        String? taskNumberInput = getUserInput(
-          prompt: "\nEnter the task number to mark as completed (0 to go back): ",
+        String? selectedTask = getUserInput(
+          prompt: "\nSelect a task to modify (0 to go back): ",
           isValid: (input) {
             if (input == '' || input == null) return false;
             int? taskNumber = int.tryParse(input);
-            return taskNumber != null && taskNumber >= 0 && taskNumber <= tasktracker.tasks.length;
+            return taskNumber != null &&
+                taskNumber >= 0 &&
+                taskNumber <= tasktracker.tasks.length;
           },
-          errorMessage: "Invalid input. Please try again."
+          errorMessage: "Invalid input. Please try again.",
         );
-        if (taskNumberInput == '0') {
+        if (selectedTask == '0') {
           print("\nGoing back to the main menu.");
           break;
         }
-        int taskNumber = int.parse(taskNumberInput!);
-        if (tasktracker.markTaskAsCompleted(taskNumber)) {
-          print("\nTask marked as completed.");
-        } else {
-          print("\nTask is already completed.");
+        int taskNumber = int.parse(selectedTask!);
+        tasktracker.displayTask(taskNumber-1); 
+
+        print("\nHow would you like to modify this task?");
+        print("1. Edit task.");
+        print("2. Delete task");
+        print("3. Mark task as complete.");
+
+        String? modChoice = getUserInput(
+          prompt: "\nEnter your choice (0 to go back): ",
+          isValid: (input) => input != null && ['0', '1', '2', '3'].contains(input),
+          errorMessage: "Invalid choice. Please try again."
+        );
+
+        switch (modChoice) {
+          case '0':
+            print("\nGoing back to the main menu.");
+            break;
+          case '1':
+          // TODO: Implement task edit functionality
+            break;
+          case '2':
+            String? confirm = getUserInput(
+              prompt: "\nAre you sure you want to delete this task? (y/n): ", 
+              isValid: (input) => input != null && ['y', 'n'].contains(input),
+              errorMessage: "\nInvalid choice. Please try again."
+            );
+            if(confirm == 'y') {
+              print(tasktracker.deleteTask(taskNumber-1) ? "\nTask deleted successfully." : "\nTask was not deleted.");
+            }
+            else {
+              print("\nDeletion cancelled.");
+            }
+            break;
+          case '3':
+            print(tasktracker.markTaskAsCompleted(taskNumber-1) ? "\nTask successfully marked complete." : "\nTask is already completed.");
+            break;
         }
         break;
       case "4":
