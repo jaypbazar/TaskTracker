@@ -110,7 +110,27 @@ main() {
             print("\nGoing back to the main menu.");
             break;
           case '1':
-          // TODO: Implement task edit functionality
+            String newTitle = getUserInput(
+              prompt: "\nEnter new title (leave blank to keep current): ",
+              isValid: (input) => input != null,
+            ) ?? tasktracker.tasks[taskNumber-1].title;
+
+            String newSubject = getUserInput(
+              prompt: "Enter new subject (leave blank to keep current): ",
+              isValid: (input) => input != null,
+            ) ?? tasktracker.tasks[taskNumber-1].subject;
+
+            String? newDescription = getUserInput(
+              prompt: "Enter new description (leave blank to keep current): ",
+              isValid: (input) => input == null || input.isNotEmpty,
+            ) ?? tasktracker.tasks[taskNumber-1].description;
+
+            print(tasktracker.editTask(
+              index: taskNumber-1,
+              title: newTitle,
+              subject: newSubject,
+              description: newDescription,
+            ) ? "\nTask updated successfully." : "\nFailed to update task.");
             break;
           case '2':
             String? confirm = getUserInput(

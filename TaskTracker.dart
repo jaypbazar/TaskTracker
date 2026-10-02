@@ -79,12 +79,25 @@ class Tasktracker {
   }
 
   displayTask(int index) {
-    Task task = tasks[index-1];
+    Task task = tasks[index];
     print("\nTitle: ${task.title}");
     print("Subject: ${task.subject}");
     print("Priority: ${task.priority.stringValue}");
     print("Description: ${task.description != null ? '${task.description}' : 'N/A'}");
     print("isComplete: ${task.isCompleted ? 'Yes' : 'No'}");
+  }
+
+  bool editTask({required int index, String? title, String? subject, String? description}) {
+    try {
+      if (title != null) tasks[index].title = title;
+      if (subject != null) tasks[index].subject = subject;
+      if (description != null) tasks[index].description = description;
+      
+      return true;
+    } 
+    catch (e) {
+      return false;
+    }
   }
 
   bool deleteTask(int index) {
