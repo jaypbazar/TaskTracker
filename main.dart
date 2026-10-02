@@ -95,13 +95,14 @@ main() {
         tasktracker.displayTask(taskNumber-1); 
 
         print("\nHow would you like to modify this task?");
-        print("1. Edit task.");
+        print("1. Edit task");
         print("2. Delete task");
-        print("3. Mark task as complete.");
+        print("3. Change priority");
+        print("4. Mark task as complete");
 
         String? modChoice = getUserInput(
           prompt: "\nEnter your choice (0 to go back): ",
-          isValid: (input) => input != null && ['0', '1', '2', '3'].contains(input),
+          isValid: (input) => input != null && ['0', '1', '2', '3', '4'].contains(input),
           errorMessage: "Invalid choice. Please try again."
         );
 
@@ -146,6 +147,30 @@ main() {
             }
             break;
           case '3':
+            print("\nAdjusting priority...");
+            print("1. Increase priority");
+            print("2. Decrease priority");
+
+            String? priorityChoice = getUserInput(
+              prompt: "\nEnter your choice (0 to go back): ",
+              isValid: (input) =>
+                  input != null && ['0', '1', '2'].contains(input),
+              errorMessage: "Invalid choice. Please try again.",
+            );
+
+            switch (priorityChoice) {
+              case '0':
+                print("\nGoing back to the main menu.");
+                break;
+              case '1':
+                print(tasktracker.increaseTaskPriority(taskNumber - 1) ? "\nTask priority increased." : "\nTask is already at the highest priority.");
+                break;
+              case '2':
+                print(tasktracker.decreaseTaskPriority(taskNumber - 1) ? "\nTask priority decreased." : "\nTask is already at the lowest priority.");
+                break;
+            }
+            break;
+          case '4':
             print(tasktracker.markTaskAsCompleted(taskNumber-1) ? "\nTask successfully marked complete." : "\nTask is already completed.");
             break;
         }

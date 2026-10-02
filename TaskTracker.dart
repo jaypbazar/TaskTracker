@@ -110,6 +110,18 @@ class Tasktracker {
     }
   }
 
+  bool increaseTaskPriority(int index) {
+    if (tasks[index].priority == TaskPriority.high) return false;
+    tasks[index].priority = TaskPriority.values[tasks[index].priority.index + 1];
+    return true;
+  }
+
+  bool decreaseTaskPriority(int index) {
+    if (tasks[index].priority == TaskPriority.low) return false;
+    tasks[index].priority = TaskPriority.values[tasks[index].priority.index - 1];
+    return true;
+  }
+
   bool markTaskAsCompleted(int index) {
     if (tasks[index].isCompleted) return false;
     tasks[index].isCompleted = true;
