@@ -183,10 +183,15 @@ main() {
           errorMessage: "Search term cannot be empty. Please try again.",
         ) ?? '';
 
-        tasktracker.searchTasks(searchTerm);
+        print("\n=================== Search Results ====================\n");
+        if (!tasktracker.searchTasks(searchTerm)) {
+          print("No tasks found matching the search term '$searchTerm'.");
+        }
         break;
       case "5":
         // Statistics
+        print("\n=================== Task Statistics ===================\n");
+        tasktracker.displayStatistics();
         break;
       case "6":
         // Watch Task Updates

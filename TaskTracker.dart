@@ -128,23 +128,58 @@ class Tasktracker {
     return true;
   }
 
-  searchTasks(String searchTerm) {
+  bool searchTasks(String searchTerm) {
     List<Task> matchingTasks = tasks.where((task) =>
         task.title.toLowerCase().contains(searchTerm.toLowerCase()) ||
         task.subject.toLowerCase().contains(searchTerm.toLowerCase()) ||
         task.priority.stringValue.toLowerCase().contains(searchTerm.toLowerCase()) ||
         task.description != null && task.description!.toLowerCase().contains(searchTerm.toLowerCase())).toList();
 
-    if (matchingTasks.isEmpty) {
-      print("\nNo tasks found matching the search term '$searchTerm'.");
-      return;
-    }
+    if (matchingTasks.isEmpty) return false;
 
-    print("\n==================== Search Results ====================\n");
     for (int i = 0; i < matchingTasks.length; i++) {
       Task task = matchingTasks[i];
       String status = task.isCompleted ? "[✓]" : "[ ]";
       print("$status ${i + 1}. ${task.title}\n    Subject: ${task.subject}\n    Task Priority: ${task.priority.stringValue}${task.description != null ? "\n    Description: ${task.description}" : ""}\n");
+    }
+    return true;
+  }
+
+  Set<String> getUniqueSubjects() {
+    Set<String> uniqueSubjects = tasks.map((task) => task.subject).toSet();
+    return uniqueSubjects;
+  }
+
+  Map<String, int> getSubjectTaskCount() {
+    Map<String, int> subjectTaskCount = {};
+    for (Task task in tasks) {
+      subjectTaskCount[task.subject] = (subjectTaskCount[task.subject] ?? 0) + 1;
+    }
+    return subjectTaskCount;
+  }
+
+  displayStatistics() {
+    int totalTasks = tasks.length;
+    int completedTasks = tasks.where((task) => task.isCompleted).length;
+    int incompleteTasks = totalTasks - completedTasks;
+
+    print("Total Tasks: $totalTasks");
+    print("Completed Tasks: $completedTasks");
+    print("Incomplete Tasks: $incompleteTasks");
+
+    print("\nSubjects:");
+    for (String subject in getUniqueSubjects()) {
+      print("$subject - ${getSubjectTaskCount()[subject]} task${getSubjectTaskCount()[subject] == 1 ? '' : 's'}");
+    }
+
+    print("\nHigh Priority Tasks:");
+    List<Task> highPriorityTasks = tasks.where((task) => !task.isCompleted && task.priority == TaskPriority.high).toList();
+    if (highPriorityTasks.isEmpty) {
+      print("\nNo high priority task to complete.");
+    } else {
+      for (Task task in highPriorityTasks) {
+        print("- ${task.title}");
+      }
     }
   }
 }
