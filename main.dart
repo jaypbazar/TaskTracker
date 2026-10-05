@@ -177,6 +177,13 @@ main() {
         break;
       case "4":
         // Search Tasks
+        String searchTerm = getUserInput(
+          prompt: "\nEnter a search term (title or subject): ",
+          isValid: (input) => input != null && input.isNotEmpty,
+          errorMessage: "Search term cannot be empty. Please try again.",
+        ) ?? '';
+
+        tasktracker.searchTasks(searchTerm);
         break;
       case "5":
         // Statistics

@@ -127,4 +127,24 @@ class Tasktracker {
     tasks[index].isCompleted = true;
     return true;
   }
+
+  searchTasks(String searchTerm) {
+    List<Task> matchingTasks = tasks.where((task) =>
+        task.title.toLowerCase().contains(searchTerm.toLowerCase()) ||
+        task.subject.toLowerCase().contains(searchTerm.toLowerCase()) ||
+        task.priority.stringValue.toLowerCase().contains(searchTerm.toLowerCase()) ||
+        task.description != null && task.description!.toLowerCase().contains(searchTerm.toLowerCase())).toList();
+
+    if (matchingTasks.isEmpty) {
+      print("\nNo tasks found matching the search term '$searchTerm'.");
+      return;
+    }
+
+    print("\n==================== Search Results ====================\n");
+    for (int i = 0; i < matchingTasks.length; i++) {
+      Task task = matchingTasks[i];
+      String status = task.isCompleted ? "[✓]" : "[ ]";
+      print("$status ${i + 1}. ${task.title}\n    Subject: ${task.subject}\n    Task Priority: ${task.priority.stringValue}${task.description != null ? "\n    Description: ${task.description}" : ""}\n");
+    }
+  }
 }
