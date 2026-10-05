@@ -5,6 +5,8 @@ class Tasktracker {
   List<Task> tasks;
 
   Tasktracker() : tasks = [];
+  
+  List<String> log = [];
 
   bool addTask({
     required String title,
@@ -85,6 +87,10 @@ class Tasktracker {
     print("Priority: ${task.priority.stringValue}");
     print("Description: ${task.description != null ? '${task.description}' : 'N/A'}");
     print("isComplete: ${task.isCompleted ? 'Yes' : 'No'}");
+  }
+
+  getTaskTitleAtIndex(int index) {
+    return tasks[index].title;
   }
 
   bool editTask({required int index, String? title, String? subject, String? description}) {
@@ -180,6 +186,15 @@ class Tasktracker {
       for (Task task in highPriorityTasks) {
         print("- ${task.title}");
       }
+    }
+  }
+
+  Stream<String> displayTaskUpdates() async* {
+    if (log.isEmpty) yield "No task updates available.";
+
+    for (String entry in log) {
+      yield entry+"\n";
+      await Future.delayed(Duration(seconds: 1));
     }
   }
 }

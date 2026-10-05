@@ -3,7 +3,7 @@ import 'dart:io';
 import 'InputHandler.dart';
 import 'TaskTracker.dart';
 
-main() {
+main() async {
   Tasktracker tasktracker = Tasktracker();
   tasktracker.populateSampleTasks();
 
@@ -62,6 +62,7 @@ main() {
           description: description,
         )) {
           print("\nTask added successfully!");
+          tasktracker.log.add("(${DateTime.now().toString()}) Added a new task: '$title' with subject '$subject'.");
         } else {
           print("\nFailed to add task.");
         }
@@ -70,6 +71,7 @@ main() {
         // View Tasks
         print("\n==================== List of Tasks ====================\n");
         tasktracker.viewSortedTasks();
+        tasktracker.log.add("(${DateTime.now().toString()}) Viewed all tasks.");
         break;
       case "3":
         // Modify a Task
@@ -126,12 +128,17 @@ main() {
               isValid: (input) => input == null || input.isNotEmpty,
             ) ?? tasktracker.tasks[taskNumber-1].description;
 
-            print(tasktracker.editTask(
+            if (tasktracker.editTask(
               index: taskNumber-1,
               title: newTitle,
               subject: newSubject,
               description: newDescription,
-            ) ? "\nTask updated successfully." : "\nFailed to update task.");
+            )) { 
+              print("\nTask updated successfully.");
+              tasktracker.log.add("(${DateTime.now().toString()}) Edited task ${tasktracker.getTaskTitleAtIndex(taskNumber-1)}: New title '$newTitle', New subject '$newSubject'.");
+            } else {
+              print("\nFailed to update task.");
+            }
             break;
           case '2':
             String? confirm = getUserInput(
@@ -140,7 +147,13 @@ main() {
               errorMessage: "\nInvalid choice. Please try again."
             );
             if(confirm == 'y') {
-              print(tasktracker.deleteTask(taskNumber-1) ? "\nTask deleted successfully." : "\nTask was not deleted.");
+              if (tasktracker.deleteTask(taskNumber-1)) { 
+                print("\nTask deleted successfully.");
+                tasktracker.log.add("(${DateTime.now().toString()}) Deleted task ${tasktracker.getTaskTitleAtIndex(taskNumber-1)}.");
+              } 
+              else {
+                print("\nTask was not deleted.");
+              }
             }
             else {
               print("\nDeletion cancelled.");
@@ -163,15 +176,30 @@ main() {
                 print("\nGoing back to the main menu.");
                 break;
               case '1':
-                print(tasktracker.increaseTaskPriority(taskNumber - 1) ? "\nTask priority increased." : "\nTask is already at the highest priority.");
+                if (tasktracker.increaseTaskPriority(taskNumber - 1)) { 
+                  print("\nTask priority increased.");
+                  tasktracker.log.add("(${DateTime.now().toString()}) Increased priority of task ${tasktracker.getTaskTitleAtIndex(taskNumber-1)}.");
+                } else {
+                  print("\nTask is already at the highest priority.");
+                }
                 break;
               case '2':
-                print(tasktracker.decreaseTaskPriority(taskNumber - 1) ? "\nTask priority decreased." : "\nTask is already at the lowest priority.");
+                if (tasktracker.decreaseTaskPriority(taskNumber - 1)) {
+                  print("\nTask priority decreased.");
+                  tasktracker.log.add("(${DateTime.now().toString()}) Decreased priority of task ${tasktracker.getTaskTitleAtIndex(taskNumber-1)}.");
+                } else {
+                  print("\nTask is already at the lowest priority.");
+                }
                 break;
             }
             break;
           case '4':
-            print(tasktracker.markTaskAsCompleted(taskNumber-1) ? "\nTask successfully marked complete." : "\nTask is already completed.");
+            if (tasktracker.markTaskAsCompleted(taskNumber-1)) {
+              print("\nTask successfully marked complete.");
+              tasktracker.log.add("(${DateTime.now().toString()}) Marked task ${tasktracker.getTaskTitleAtIndex(taskNumber-1)} as complete.");
+            } else {
+              print("\nTask is already completed.");
+            }
             break;
         }
         break;
@@ -187,14 +215,20 @@ main() {
         if (!tasktracker.searchTasks(searchTerm)) {
           print("No tasks found matching the search term '$searchTerm'.");
         }
+        tasktracker.log.add("(${DateTime.now().toString()}) Searched for tasks with term '$searchTerm'.");
         break;
       case "5":
         // Statistics
         print("\n=================== Task Statistics ===================\n");
         tasktracker.displayStatistics();
+        tasktracker.log.add("(${DateTime.now().toString()}) Viewed task statistics.");
         break;
       case "6":
-        // Watch Task Updates
+        // Simulate Task Updates
+        print("\nConecting to task updates...\n");
+        await for (String update in tasktracker.displayTaskUpdates()) {
+          print(update);
+        }
         break;
       default:
         print("\nInvalid choice. Please try again.");
